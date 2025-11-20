@@ -5,7 +5,7 @@
   <title>Mini Giochi Bambini</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- PWA / icone (se hai già manifest e icons, lasciali così) -->
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -26,72 +26,164 @@
       padding: 0;
       width: 100%;
       height: 100%;
+      background: #000;
     }
 
     body {
-      background: linear-gradient(135deg, #ffe4f2, #e0f3ff);
-      color: #222;
-      overflow-y: auto;          /* PUOI SCORRERE su telefono */
-      overflow-x: hidden;
+      overflow: hidden; /* l'app gestisce lei lo scroll interno */
     }
 
     #app {
-      min-height: 100vh;
-      max-width: 900px;
-      margin: 0 auto;
-      background: radial-gradient(circle at top, #ffffff, #eef4ff);
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      border-radius: 12px;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      background: radial-gradient(circle at top, #ffffff, #e0f2ff);
       position: relative;
+      overflow: hidden;
     }
 
     .screen {
+      position: absolute;
+      inset: 0;
       display: none;
-      min-height: 100vh;
-      padding: 10px;
+      flex-direction: column;
+      background: radial-gradient(circle at top, #ffffff, #e0f2ff);
     }
 
     .screen.active {
       display: flex;
-      flex-direction: column;
     }
 
-    /* MENU */
+    /* HEADER GIOCHI / MENU */
+
+    .menu-header, .game-header {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #ffe4f2, #e0f3ff);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 5;
+    }
 
     .menu-header {
+      justify-content: center;
+      flex-direction: column;
       text-align: center;
-      padding: 8px 10px 2px;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background: linear-gradient(135deg, #ffe4f2, #e0f3ff);
     }
 
     .menu-header h1 {
       margin: 0;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       color: #513b96;
     }
 
     .menu-header p {
-      margin: 4px 0 8px;
-      font-size: 0.9rem;
+      margin: 4px 0 0;
+      font-size: 0.95rem;
       color: #7b5ba8;
+    }
+
+    .back-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #805ad5, #d53f8c);
+      color: #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      white-space: nowrap;
+    }
+
+    .game-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #4a3c89;
+    }
+
+    /* CORPO SCHERMATE */
+
+    .screen-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+      overflow: auto; /* scroll interno se serve */
+    }
+
+    .game-body {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      width: 100%;
+      max-width: 900px;
+      height: 100%;
+      max-height: 100%;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: auto;
+    }
+
+    .small-note {
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .simple {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #4c6fff;
+      color: white;
+      align-self: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+    }
+
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* MENU */
+
+    #menu .screen-body {
+      padding: 0;
+    }
+
+    .menu-grid-wrapper {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
     }
 
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 10px;
-      padding: 10px;
-      padding-bottom: 20px;
     }
 
     .game-button {
       border: none;
       border-radius: 22px;
-      padding: 14px 12px;
-      font-size: 0.9rem;
+      padding: 16px 14px;
+      font-size: 0.95rem;
       font-weight: 600;
       color: #fff;
       cursor: pointer;
@@ -99,20 +191,20 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.18);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.22);
       transition: transform 0.12s ease, box-shadow 0.12s ease;
       text-align: left;
       min-height: 120px;
     }
 
     .game-button span.big {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       margin-bottom: 4px;
     }
 
     .game-button:active {
       transform: translateY(2px);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.18);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.22);
     }
 
     .btn-1 { background: linear-gradient(135deg, #ff7eb3, #ff758c); }
@@ -131,98 +223,12 @@
     .btn-14 { background: linear-gradient(135deg, #4299e1, #3182ce); }
     .btn-15 { background: linear-gradient(135deg, #f56565, #e53e3e); }
 
-    /* SCHERMATE GIOCO */
-
-    .game-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 4px 4px;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background: radial-gradient(circle at top, #ffffff, #eef4ff);
-    }
-
-    .back-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      background: linear-gradient(135deg, #805ad5, #d53f8c);
-      color: #fff;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    }
-
-    .game-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #4a3c89;
-    }
-
-    .game-body {
-      flex: 1;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-    }
-
-    .card {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 10px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 460px;
-    }
-
-    .small-note {
-      font-size: 0.75rem;
-      color: #666;
-      margin-top: 4px;
-    }
-
-    button.simple {
-      border-radius: 999px;
-      border: none;
-      padding: 8px 16px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      background: #4c6fff;
-      color: white;
-      margin-top: 4px;
-    }
-
-    .flex-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* GIOCO 1: DISEGNA */
-
-    #drawCanvas {
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      touch-action: none;
-      width: 100%;
-      max-width: 700px;
-      height: 60vh; /* quasi schermo intero su tel */
-      display: block;
-    }
+    /* GIOCO 1: DISEGNA FULLSCREEN */
 
     .toolbar {
-      margin-bottom: 6px;
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
       justify-content: center;
       align-items: center;
       font-size: 0.8rem;
@@ -233,7 +239,7 @@
       height: 24px;
       border-radius: 999px;
       border: 2px solid #fff;
-      box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.3);
       cursor: pointer;
     }
 
@@ -241,51 +247,69 @@
       box-shadow: 0 0 0 3px #333;
     }
 
-    /* GIOCO 2: PUZZLE */
+    #drawCanvas {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+      touch-action: none;
+      width: 100%;
+      height: 70vh; /* bello grande */
+      display: block;
+    }
+
+    /* GIOCO 2: PUZZLE (FULL) */
 
     .puzzle-grid {
+      flex: 1;
       display: grid;
-      grid-template-columns: repeat(2, minmax(100px, 1fr));
-      grid-template-rows: repeat(2, minmax(100px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
       gap: 6px;
-      margin: 6px 0;
+      min-height: 250px;
     }
 
     .puzzle-piece {
       border-radius: 14px;
       cursor: pointer;
-      background-size: 200% 200%;
+      background: linear-gradient(135deg,#ff7eb3,#ff758c);
       box-shadow: 0 2px 6px rgba(0,0,0,0.25);
       border: 2px solid #fff;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffffdd;
+      font-size: 2.5rem;
+      font-weight: 800;
     }
 
     /* GIOCO 3: MEMORY */
 
     .memory-grid {
       display: grid;
-      grid-template-columns: repeat(4, 70px);
-      gap: 6px;
+      grid-template-columns: repeat(4, minmax(60px, 1fr));
+      gap: 8px;
       justify-content: center;
     }
 
     .memory-card {
-      width: 70px;
-      height: 90px;
-      border-radius: 12px;
+      aspect-ratio: 2/3;
+      border-radius: 14px;
       background: #6b46c1;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.4rem;
+      font-size: 1.7rem;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
       user-select: none;
     }
 
     .memory-card.revealed {
       background: white;
       border: 2px solid #805ad5;
+      color: #4a3c89;
     }
 
     /* GIOCO 4: XILOFONO */
@@ -293,47 +317,49 @@
     .xylophone {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
       width: 100%;
+      margin-top: 8px;
     }
 
     .xy-key {
-      width: 90%;
-      max-width: 320px;
-      height: 30px;
-      border-radius: 16px;
-      background: #805ad5;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      width: 95%;
+      max-width: 500px;
+      height: 46px;
+      border-radius: 18px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 0.85rem;
+      font-size: 1rem;
+      font-weight: 600;
+      user-select: none;
     }
 
     /* GIOCO 5: ACCHIAPPA L'ANIMALE */
 
     .mole-grid {
       display: grid;
-      grid-template-columns: repeat(3, 80px);
-      grid-template-rows: repeat(3, 80px);
-      gap: 6px;
+      grid-template-columns: repeat(3, 90px);
+      grid-template-rows: repeat(3, 90px);
+      gap: 8px;
       justify-content: center;
     }
 
     .mole-cell {
-      width: 80px;
-      height: 80px;
-      border-radius: 18px;
+      width: 90px;
+      height: 90px;
+      border-radius: 20px;
       background: #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 2.2rem;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.22);
       user-select: none;
     }
 
@@ -342,25 +368,27 @@
     .shape-row, .slot-row {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin: 6px 0;
+      gap: 12px;
+      margin: 8px 0;
       flex-wrap: wrap;
     }
 
     .shape-item, .shape-slot {
-      width: 70px;
-      height: 70px;
-      border-radius: 14px;
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #edf2ff;
       box-shadow: 0 2px 4px rgba(0,0,0,0.18);
-      font-size: 1.6rem;
+      font-size: 1.8rem;
     }
 
     .shape-slot {
       border: 2px dashed #a0aec0;
+      color: #4a5568;
+      font-size: 0.85rem;
     }
 
     .shape-slot.filled {
@@ -371,7 +399,7 @@
     /* QUIZ */
 
     .quiz-text {
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       margin-bottom: 8px;
       color: #2d3748;
       text-align: center;
@@ -382,62 +410,64 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 8px;
+      margin-bottom: 6px;
     }
 
     .quiz-btn {
-      min-width: 64px;
+      min-width: 72px;
       border-radius: 999px;
       border: none;
-      padding: 10px 14px;
-      font-size: 0.95rem;
+      padding: 10px 16px;
+      font-size: 1rem;
       cursor: pointer;
       background: #805ad5;
       color: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.22);
+      user-select: none;
     }
 
-    /* GIOCO 15: BOLLE */
+    /* GIOCO 15: BOLLE FULL */
 
     .bubble-area {
       width: 100%;
-      max-width: 360px;
-      height: 280px;
-      border-radius: 20px;
+      max-width: 480px;
+      height: 320px;
+      border-radius: 22px;
       background: linear-gradient(180deg, #cfefff, #edf2ff);
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
-      margin-top: 6px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8), 0 4px 10px rgba(0,0,0,0.2);
+      margin: 8px auto 0;
     }
 
     .bubble {
       position: absolute;
-      width: 34px;
-      height: 34px;
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
-      border: 2px solid rgba(255,255,255,0.9);
-      background: rgba(255,255,255,0.5);
-      box-shadow: 0 0 10px rgba(255,255,255,0.8);
+      border: 2px solid rgba(255,255,255,0.95);
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(173,216,230,0.3));
+      box-shadow: 0 0 10px rgba(255,255,255,0.9);
       cursor: pointer;
     }
 
-    /* DRAG & DROP GENERAL */
+    /* DRAG & DROP */
 
     .drag-item {
       padding: 6px 10px;
       border-radius: 999px;
       background: #fed7e2;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       cursor: grab;
       box-shadow: 0 2px 4px rgba(0,0,0,0.18);
       white-space: nowrap;
     }
 
     .drop-zone {
-      min-width: 90px;
-      min-height: 60px;
-      padding: 4px;
-      border-radius: 14px;
+      min-width: 100px;
+      min-height: 70px;
+      padding: 6px;
+      border-radius: 16px;
       background: #e2e8f0;
       border: 2px dashed #a0aec0;
       display: flex;
@@ -445,7 +475,7 @@
       justify-content: center;
       align-items: center;
       gap: 4px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       text-align: center;
     }
 
@@ -454,108 +484,134 @@
       border-style: solid;
     }
 
+    /* CANVAS CORSA TRENINO */
+
+    #trainCanvas {
+      background:#e2e8f0;
+      border-radius:20px;
+      margin-top:8px;
+      width:100%;
+      max-width:500px;
+      height:260px;
+      display:block;
+    }
+
     /* RESPONSIVE */
 
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       .menu-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
+        grid-template-columns: repeat(2, minmax(0,1fr));
       }
-
       .game-button {
-        min-height: 110px;
-        padding: 12px;
+        min-height: 115px;
       }
-
-      .game-button span.big {
-        font-size: 1.2rem;
+      .memory-grid {
+        grid-template-columns: repeat(4, minmax(55px, 1fr));
       }
-
-      .card {
-        max-width: 96%;
-        margin: 0 auto;
+      .mole-grid {
+        grid-template-columns: repeat(3, 80px);
+        grid-template-rows: repeat(3, 80px);
       }
+      .mole-cell {
+        width:80px;
+        height:80px;
+      }
+      .xy-key {
+        height:44px;
+      }
+    }
 
-      .quiz-btn {
+    @media (max-width: 480px) {
+      .menu-header h1 {
+        font-size: 1.4rem;
+      }
+      .game-title {
         font-size: 1.05rem;
-        padding: 12px 18px;
       }
-
-      #numQuestion .big-number {
-        font-size: 46px !important;
+      .card {
+        border-radius: 12px;
+        padding: 8px;
+      }
+      #drawCanvas {
+        height: 65vh;
       }
     }
   </style>
 </head>
 <body>
   <div id="app">
-    <!-- MENU PRINCIPALE -->
+
+    <!-- MENU -->
     <section id="menu" class="screen active">
       <div class="menu-header">
         <h1>🎈 Mini Giochi Bambini</h1>
         <p>Tocca un gioco per iniziare!</p>
       </div>
-      <div class="menu-grid">
-        <button class="game-button btn-1" data-target="game-disegna">
-          <span class="big">🎨 Disegna</span>
-          <span>Colora con le dita</span>
-        </button>
-        <button class="game-button btn-2" data-target="game-puzzle">
-          <span class="big">🧩 Puzzle 2x2</span>
-          <span>Rimetti a posto i pezzi</span>
-        </button>
-        <button class="game-button btn-3" data-target="game-memory">
-          <span class="big">🧠 Memory</span>
-          <span>Trova le coppie</span>
-        </button>
-        <button class="game-button btn-4" data-target="game-xilofono">
-          <span class="big">🎵 Xilofono</span>
-          <span>8 tasti colorati</span>
-        </button>
-        <button class="game-button btn-5" data-target="game-mole">
-          <span class="big">🐵 Acchiappa!</span>
-          <span>Tocca l'animale giusto</span>
-        </button>
-        <button class="game-button btn-6" data-target="game-forme">
-          <span class="big">🔺 Forme</span>
-          <span>Trascina al posto giusto</span>
-        </button>
-        <button class="game-button btn-7" data-target="game-numeri">
-          <span class="big">🔢 Numeri</span>
-          <span>Conta e scegli</span>
-        </button>
-        <button class="game-button btn-8" data-target="game-colori">
-          <span class="big">🎨 Colori</span>
-          <span>Tocca il colore giusto</span>
-        </button>
-        <button class="game-button btn-9" data-target="game-giocattoli">
-          <span class="big">🧸 Giocattoli</span>
-          <span>Metti nella scatola giusta</span>
-        </button>
-        <button class="game-button btn-10" data-target="game-parco">
-          <span class="big">🚮 Parco Pulito</span>
-          <span>Butta i rifiuti</span>
-        </button>
-        <button class="game-button btn-11" data-target="game-corsa">
-          <span class="big">🚂 Corsa Treno</span>
-          <span>Cambia binario</span>
-        </button>
-        <button class="game-button btn-12" data-target="game-trenino">
-          <span class="big">🚃 Costruisci Treno</span>
-          <span>Metti i vagoni</span>
-        </button>
-        <button class="game-button btn-13" data-target="game-stelle">
-          <span class="big">⭐ Conta Stelle</span>
-          <span>Quante sono?</span>
-        </button>
-        <button class="game-button btn-14" data-target="game-animale-suono">
-          <span class="big">🐮 Che verso?</span>
-          <span>Trova l'animale</span>
-        </button>
-        <button class="game-button btn-15" data-target="game-bolle">
-          <span class="big">🫧 Bolle</span>
-          <span>Scoppiale tutte!</span>
-        </button>
+      <div class="screen-body">
+        <div class="menu-grid-wrapper">
+          <div class="menu-grid">
+            <button class="game-button btn-1" data-target="game-disegna">
+              <span class="big">🎨 Disegna</span>
+              <span>Colora a schermo intero</span>
+            </button>
+            <button class="game-button btn-2" data-target="game-puzzle">
+              <span class="big">🧩 Puzzle 2x2</span>
+              <span>Rimetti in ordine 1-4</span>
+            </button>
+            <button class="game-button btn-3" data-target="game-memory">
+              <span class="big">🧠 Memory</span>
+              <span>Trova le coppie</span>
+            </button>
+            <button class="game-button btn-4" data-target="game-xilofono">
+              <span class="big">🎵 Xilofono</span>
+              <span>8 tasti colorati</span>
+            </button>
+            <button class="game-button btn-5" data-target="game-mole">
+              <span class="big">🐵 Acchiappa!</span>
+              <span>Tocca l'animale giusto</span>
+            </button>
+            <button class="game-button btn-6" data-target="game-forme">
+              <span class="big">🔺 Forme</span>
+              <span>Metti al posto giusto</span>
+            </button>
+            <button class="game-button btn-7" data-target="game-numeri">
+              <span class="big">🔢 Numeri</span>
+              <span>Che numero vedi?</span>
+            </button>
+            <button class="game-button btn-8" data-target="game-colori">
+              <span class="big">🎨 Colori</span>
+              <span>Tocca il colore giusto</span>
+            </button>
+            <button class="game-button btn-9" data-target="game-giocattoli">
+              <span class="big">🧸 Giocattoli</span>
+              <span>Ordina nelle scatole</span>
+            </button>
+            <button class="game-button btn-10" data-target="game-parco">
+              <span class="big">🚮 Parco Pulito</span>
+              <span>Butta i rifiuti giusti</span>
+            </button>
+            <button class="game-button btn-11" data-target="game-corsa">
+              <span class="big">🚂 Corsa Treno</span>
+              <span>Cambia binario</span>
+            </button>
+            <button class="game-button btn-12" data-target="game-trenino">
+              <span class="big">🚃 Costruisci Treno</span>
+              <span>Metti i vagoni</span>
+            </button>
+            <button class="game-button btn-13" data-target="game-stelle">
+              <span class="big">⭐ Conta Stelle</span>
+              <span>Quante sono?</span>
+            </button>
+            <button class="game-button btn-14" data-target="game-animale-suono">
+              <span class="big">🐮 Che verso?</span>
+              <span>Trova l'animale</span>
+            </button>
+            <button class="game-button btn-15" data-target="game-bolle">
+              <span class="big">🫧 Bolle</span>
+              <span>Scoppiale tutte!</span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -563,26 +619,30 @@
     <section id="game-disegna" class="screen">
       <div class="game-header">
         <button class="back-btn" data-home>🏠 Home</button>
-        <div class="game-title">🎨 Disegna e colora</div>
+        <div class="game-title">🎨 Disegna a schermo intero</div>
       </div>
-      <div class="game-body">
-        <div class="toolbar">
-          <span>Colore:</span>
-          <div class="color-dot" data-color="#ff4b6e" style="background:#ff4b6e"></div>
-          <div class="color-dot" data-color="#ffb800" style="background:#ffb800"></div>
-          <div class="color-dot" data-color="#20c997" style="background:#20c997"></div>
-          <div class="color-dot" data-color="#3b82f6" style="background:#3b82f6"></div>
-          <div class="color-dot" data-color="#000000" style="background:#000000"></div>
-          <span>Spessore:</span>
-          <select id="brushSize">
-            <option value="3">Piccolo</option>
-            <option value="6" selected>Medio</option>
-            <option value="10">Grosso</option>
-          </select>
-          <button class="simple" id="clearCanvas">Pulisci</button>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="toolbar">
+              <span>Colore:</span>
+              <div class="color-dot" data-color="#ff4b6e" style="background:#ff4b6e"></div>
+              <div class="color-dot" data-color="#ffb800" style="background:#ffb800"></div>
+              <div class="color-dot" data-color="#20c997" style="background:#20c997"></div>
+              <div class="color-dot" data-color="#3b82f6" style="background:#3b82f6"></div>
+              <div class="color-dot" data-color="#000000" style="background:#000000"></div>
+              <span>Spessore:</span>
+              <select id="brushSize">
+                <option value="3">Piccolo</option>
+                <option value="6" selected>Medio</option>
+                <option value="10">Grosso</option>
+              </select>
+              <button class="simple" id="clearCanvas">Pulisci</button>
+            </div>
+            <canvas id="drawCanvas"></canvas>
+            <div class="small-note">Usa il dito o il mouse per disegnare a schermo pieno.</div>
+          </div>
         </div>
-        <canvas id="drawCanvas"></canvas>
-        <div class="small-note">Usa il dito o il mouse per disegnare a schermo pieno.</div>
       </div>
     </section>
 
@@ -592,12 +652,14 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🧩 Puzzle 2x2</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Tocca due tessere per scambiarle. Ricomponi il trenino!</div>
-          <div class="puzzle-grid" id="puzzleGrid"></div>
-          <button class="simple" id="puzzleReset">Mescola</button>
-          <div id="puzzleMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Tocca due tessere per scambiarle. Metti i numeri in ordine 1-4.</div>
+            <div class="puzzle-grid" id="puzzleGrid"></div>
+            <button class="simple" id="puzzleReset">Mescola</button>
+            <div id="puzzleMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -608,12 +670,14 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🧠 Memory</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Tocca due carte per volta e trova le coppie.</div>
-          <div class="memory-grid" id="memoryGrid"></div>
-          <button class="simple" id="memoryReset">Nuova partita</button>
-          <div id="memoryMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Tocca due carte per volta e trova tutte le coppie.</div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <button class="simple" id="memoryReset">Nuova partita</button>
+            <div id="memoryMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -624,10 +688,12 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🎵 Xilofono</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="xylophone" id="xylophone"></div>
-          <div class="small-note">Tocca i tasti per suonare.</div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Tocca i tasti grandi e colorati per suonare.</div>
+            <div class="xylophone" id="xylophone"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -638,13 +704,15 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🐵 Acchiappa l'animale</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Tocca l'animale quando compare. Hai 30 secondi!</div>
-          <div>Tempo: <span id="moleTime">30</span>s · Punti: <span id="moleScore">0</span></div>
-          <div class="mole-grid" id="moleGrid"></div>
-          <button class="simple" id="moleStart">Start</button>
-          <div id="moleMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Tocca l'animale quando compare. Hai 30 secondi!</div>
+            <div>Tempo: <span id="moleTime">30</span>s · Punti: <span id="moleScore">0</span></div>
+            <div class="mole-grid" id="moleGrid"></div>
+            <button class="simple" id="moleStart">Start</button>
+            <div id="moleMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -655,12 +723,14 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🔺 Forme</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Trascina ogni forma nel suo posto.</div>
-          <div class="shape-row" id="shapeRow"></div>
-          <div class="slot-row" id="slotRow"></div>
-          <div id="formeMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Trascina ogni forma nel suo posto.</div>
+            <div class="shape-row" id="shapeRow"></div>
+            <div class="slot-row" id="slotRow"></div>
+            <div id="formeMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -671,12 +741,13 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🔢 Numeri</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="quiz-text" id="numQuestion"></div>
-          <div class="quiz-options" id="numOptions"></div>
-          <button class="simple" id="numNext">Nuovo numero</button>
-          <div id="numMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="quiz-text" id="numQuestion"></div>
+            <div class="quiz-options" id="numOptions"></div>
+            <div id="numMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -685,14 +756,15 @@
     <section id="game-colori" class="screen">
       <div class="game-header">
         <button class="back-btn" data-home>🏠 Home</button>
-        <div class="game-title">🎨 Colori esatti</div>
+        <div class="game-title">🎨 Colori</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="quiz-text" id="colorQuestion"></div>
-          <div class="quiz-options" id="colorOptions"></div>
-          <button class="simple" id="colorNext">Nuovo colore</button>
-          <div id="colorMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="quiz-text" id="colorQuestion"></div>
+            <div class="quiz-options" id="colorOptions"></div>
+            <div id="colorMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -703,16 +775,18 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🧸 Ordina i giocattoli</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Trascina i giocattoli nella scatola giusta.</div>
-          <div class="flex-row" id="toyItems"></div>
-          <div class="flex-row">
-            <div class="drop-zone" data-type="animale">Animali</div>
-            <div class="drop-zone" data-type="palla">Palle</div>
-            <div class="drop-zone" data-type="auto">Auto</div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Trascina i giocattoli nella scatola giusta.</div>
+            <div class="flex-row" id="toyItems"></div>
+            <div class="flex-row">
+              <div class="drop-zone" data-type="animale">Animali</div>
+              <div class="drop-zone" data-type="palla">Palle</div>
+              <div class="drop-zone" data-type="auto">Auto</div>
+            </div>
+            <div id="toyMsg" class="small-note"></div>
           </div>
-          <div id="toyMsg" class="small-note"></div>
         </div>
       </div>
     </section>
@@ -723,16 +797,18 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🚮 Parco pulito</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Trascina i rifiuti nel cestino giusto.</div>
-          <div class="flex-row" id="trashItems"></div>
-          <div class="flex-row">
-            <div class="drop-zone" data-type="plastica">Plastica</div>
-            <div class="drop-zone" data-type="carta">Carta</div>
-            <div class="drop-zone" data-type="vetro">Vetro</div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Trascina i rifiuti nel cestino giusto.</div>
+            <div class="flex-row" id="trashItems"></div>
+            <div class="flex-row">
+              <div class="drop-zone" data-type="plastica">Plastica</div>
+              <div class="drop-zone" data-type="carta">Carta</div>
+              <div class="drop-zone" data-type="vetro">Vetro</div>
+            </div>
+            <div id="trashMsg" class="small-note"></div>
           </div>
-          <div id="trashMsg" class="small-note"></div>
         </div>
       </div>
     </section>
@@ -743,16 +819,18 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🚂 Corsa del treno</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Usa ◀️ e ▶️ o i pulsanti per cambiare binario.</div>
-          <div class="flex-row">
-            <button class="simple" id="trainLeft">◀️</button>
-            <button class="simple" id="trainRight">▶️</button>
-            <button class="simple" id="trainStart">Start</button>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Usa ◀️ e ▶️ o i pulsanti per cambiare binario e evitare gli ostacoli.</div>
+            <div class="flex-row">
+              <button class="simple" id="trainLeft">◀️</button>
+              <button class="simple" id="trainRight">▶️</button>
+              <button class="simple" id="trainStart">Start</button>
+            </div>
+            <canvas id="trainCanvas"></canvas>
+            <div id="trainMsg" class="small-note"></div>
           </div>
-          <canvas id="trainCanvas" width="260" height="200" style="background:#e2e8f0;border-radius:16px;margin-top:6px;"></canvas>
-          <div id="trainMsg" class="small-note"></div>
         </div>
       </div>
     </section>
@@ -763,12 +841,14 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🚃 Costruisci il trenino</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="small-note">Trascina i vagoni negli spazi.</div>
-          <div class="flex-row" id="trainParts"></div>
-          <div class="flex-row" id="trainSlots"></div>
-          <div id="buildTrainMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="small-note">Trascina i vagoni negli spazi.</div>
+            <div class="flex-row" id="trainParts"></div>
+            <div class="flex-row" id="trainSlots"></div>
+            <div id="buildTrainMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -779,12 +859,13 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">⭐ Conta le stelle</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div id="starsDisplay" style="font-size:2rem;text-align:center;margin-bottom:4px;"></div>
-          <div class="quiz-options" id="starsOptions"></div>
-          <button class="simple" id="starsNext">Nuove stelle</button>
-          <div id="starsMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div id="starsDisplay" style="font-size:2.4rem;text-align:center;margin-bottom:4px;"></div>
+            <div class="quiz-options" id="starsOptions"></div>
+            <div id="starsMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -795,12 +876,14 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🐮 Che verso fa?</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div class="quiz-text" id="soundQuestion"></div>
-          <div class="quiz-options" id="soundOptions"></div>
-          <button class="simple" id="soundNext">Nuovo verso</button>
-          <div id="soundMsg" class="small-note"></div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div class="quiz-text" id="soundQuestion"></div>
+            <button class="simple" id="soundPlay">🔊 Ascolta di nuovo</button>
+            <div class="quiz-options" id="soundOptions"></div>
+            <div id="soundMsg" class="small-note"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -811,19 +894,22 @@
         <button class="back-btn" data-home>🏠 Home</button>
         <div class="game-title">🫧 Rompi le bolle</div>
       </div>
-      <div class="game-body">
-        <div class="card">
-          <div>Bollette scoppiate: <span id="bubbleScore">0</span></div>
-          <div class="bubble-area" id="bubbleArea"></div>
-          <button class="simple" id="bubbleStart">Start</button>
-          <div class="small-note">Tocca le bolle per farle scoppiare!</div>
+      <div class="screen-body">
+        <div class="game-body">
+          <div class="card">
+            <div>Bollette scoppiate: <span id="bubbleScore">0</span></div>
+            <div class="bubble-area" id="bubbleArea"></div>
+            <button class="simple" id="bubbleStart">Start</button>
+            <div class="small-note">Tocca le bolle per farle scoppiare!</div>
+          </div>
         </div>
       </div>
     </section>
+
   </div>
 
   <script>
-    /* ------------ AUDIO GLOBALE (click / success / error / xilofono) ------------ */
+    /* ------------ AUDIO GLOBALE ------------ */
     let audioCtx = null;
     function ensureAudioContext() {
       if (!audioCtx) {
@@ -831,7 +917,7 @@
       }
     }
 
-    function playTone(freq, duration = 0.2, type = 'sine', vol = 0.3) {
+    function playTone(freq, duration = 0.25, type = 'sine', vol = 0.25) {
       ensureAudioContext();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -839,18 +925,19 @@
       osc.type = type;
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(vol, audioCtx.currentTime + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-      osc.start();
-      osc.stop(audioCtx.currentTime + duration);
+      const now = audioCtx.currentTime;
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(vol, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      osc.start(now);
+      osc.stop(now + duration);
     }
 
-    function playClick()   { playTone(500, 0.08, 'square', 0.15); }
-    function playSuccess() { playTone(800, 0.2, 'triangle', 0.25); }
+    function playClick()   { playTone(600, 0.08, 'square', 0.15); }
+    function playSuccess() { playTone(880, 0.2, 'triangle', 0.25); }
     function playError()   { playTone(200, 0.25, 'sawtooth', 0.2); }
 
-    /* ------------ NAVIGAZIONE SCHERMATE ------------ */
+    /* ------------ NAVIGAZIONE ------------ */
     const screens = document.querySelectorAll('.screen');
 
     function showScreen(id) {
@@ -873,7 +960,7 @@
       });
     });
 
-    /* ------------ GIOCO 1: DISEGNA ------------ */
+    /* ------------ DISEGNA ------------ */
     let resizeDrawCanvas;
     (function() {
       const canvas = document.getElementById('drawCanvas');
@@ -884,8 +971,8 @@
 
       resizeDrawCanvas = function() {
         const rect = canvas.parentElement.getBoundingClientRect();
-        const width = Math.min(rect.width - 10, 800);
-        const height = Math.max(window.innerHeight * 0.55, 260);
+        const width = rect.width - 10;
+        const height = Math.max(window.innerHeight * 0.65, 260);
         canvas.width = width;
         canvas.height = height;
       };
@@ -912,6 +999,7 @@
       }
 
       function startDraw(e) {
+        ensureAudioContext();
         drawing = true;
         const pos = getPos(e);
         ctx.beginPath();
@@ -963,20 +1051,19 @@
         playClick();
       });
 
-      // prima dimensione di sicurezza
       resizeDrawCanvas();
     })();
 
-    /* ------------ GIOCO 2: PUZZLE ------------ */
+    /* ------------ PUZZLE (1-4) ------------ */
     (function() {
       const grid = document.getElementById('puzzleGrid');
       const msg = document.getElementById('puzzleMsg');
       const resetBtn = document.getElementById('puzzleReset');
       const piecesData = [
-        {id:0, bg:'linear-gradient(135deg,#ff7eb3,#ff758c)', pos:'0% 0%'},
-        {id:1, bg:'linear-gradient(135deg,#ff7eb3,#ff758c)', pos:'100% 0%'},
-        {id:2, bg:'linear-gradient(135deg,#ff7eb3,#ff758c)', pos:'0% 100%'},
-        {id:3, bg:'linear-gradient(135deg,#ff7eb3,#ff758c)', pos:'100% 100%'}
+        {id:0, num:1},
+        {id:1, num:2},
+        {id:2, num:3},
+        {id:3, num:4}
       ];
       let current = [];
       let first = null;
@@ -993,9 +1080,8 @@
         current.forEach((p, idx) => {
           const div = document.createElement('div');
           div.className = 'puzzle-piece';
-          div.style.backgroundImage = p.bg;
-          div.style.backgroundPosition = p.pos;
           div.dataset.index = idx;
+          div.textContent = p.num;
           div.addEventListener('click', () => onClick(idx));
           grid.appendChild(div);
         });
@@ -1020,7 +1106,7 @@
       function checkWin() {
         const ok = current.every((p, i) => p.id === i);
         if (ok) {
-          msg.textContent = 'Bravo! Puzzle completato! 🎉';
+          msg.textContent = 'Bravo! Puzzle in ordine 1-4! 🎉';
           playSuccess();
         } else {
           msg.textContent = '';
@@ -1038,19 +1124,20 @@
       reset();
     })();
 
-    /* ------------ GIOCO 3: MEMORY ------------ */
+    /* ------------ MEMORY ------------ */
     (function() {
       const grid = document.getElementById('memoryGrid');
       const resetBtn = document.getElementById('memoryReset');
       const msg = document.getElementById('memoryMsg');
-      const icons = ['🐶','🐱','🐭','🐸'];
+      const icons = ['🐶','🐱','🐭','🐸','🐼','🐨'];
       let cards = [];
       let firstIdx = null;
       let lock = false;
       let found = 0;
 
       function setup() {
-        const arr = icons.concat(icons).map((icon, index) => ({
+        const base = icons.slice(0,6);
+        const arr = base.concat(base).map((icon, index) => ({
           id:index, icon, revealed:false, matched:false
         }));
         for (let i = arr.length - 1; i > 0; i--) {
@@ -1125,46 +1212,36 @@
       setup();
     })();
 
-    /* ------------ GIOCO 4: XILOFONO (8 tasti colorati) ------------ */
-(function() {
-  const container = document.getElementById('xylophone');
+    /* ------------ XILOFONO ------------ */
+    (function() {
+      const container = document.getElementById('xylophone');
+      const notes  = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
+      const names  = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si', 'Do'];
+      const colors = [
+        '#ff7eb3', '#ff9f1c', '#f6e05e', '#68d391',
+        '#4299e1', '#9f7aea', '#ed64a6', '#f56565'
+      ];
 
-  const notes  = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
-  const names  = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si', 'Do'];
+      notes.forEach((freq, i) => {
+        const div = document.createElement('div');
+        div.className = 'xy-key';
+        div.textContent = names[i];
+        div.style.background = colors[i];
+        div.addEventListener('click', () => {
+          playTone(freq, 0.35, 'triangle', 0.3);
+        });
+        container.appendChild(div);
+      });
+    })();
 
-  const colors = [
-    '#ff7eb3', // rosa
-    '#ff9f1c', // arancio
-    '#f6e05e', // giallo
-    '#68d391', // verde
-    '#4299e1', // blu
-    '#9f7aea', // viola chiaro
-    '#ed64a6', // fucsia
-    '#f56565'  // rosso
-  ];
-
-  notes.forEach((freq, i) => {
-    const div = document.createElement('div');
-    div.className = 'xy-key';
-    div.textContent = names[i];
-    div.style.background = colors[i];
-    div.style.opacity = '1';
-    div.addEventListener('click', () => {
-      playTone(freq, 0.3, 'sine', 0.3);
-    });
-    container.appendChild(div);
-  });
-})();
-
-
-    /* ------------ GIOCO 5: ACCHIAPPA L'ANIMALE ------------ */
+    /* ------------ ACCHIAPPA ------------ */
     (function() {
       const grid = document.getElementById('moleGrid');
       const timeSpan = document.getElementById('moleTime');
       const scoreSpan = document.getElementById('moleScore');
       const msg = document.getElementById('moleMsg');
       const btn = document.getElementById('moleStart');
-      const animals = ['🐶','🐱','🐰','🐵'];
+      const animals = ['🐶','🐱','🐰','🐵','🐻','🐼'];
       let interval = null;
       let timerInterval = null;
       let timeLeft = 30;
@@ -1182,6 +1259,9 @@
             cell.textContent = '';
             activeIndex = -1;
             playSuccess();
+          } else {
+            if (cell.textContent === '') return;
+            playError();
           }
         });
         grid.appendChild(cell);
@@ -1233,7 +1313,7 @@
       btn.addEventListener('click', startGame);
     })();
 
-    /* ------------ GIOCO 6: FORME ------------ */
+    /* ------------ FORME ------------ */
     (function() {
       const shapes = [
         {id:'cerchio', label:'⚪'},
@@ -1294,29 +1374,30 @@
     })();
 
     /* ------------ HELPER QUIZ ------------ */
-    function createQuiz(containerOptions, options, correctValue, callback) {
+    function createQuiz(containerOptions, options, correctValue, onResult) {
       containerOptions.innerHTML = '';
       options.forEach(val => {
         const btn = document.createElement('button');
         btn.className = 'quiz-btn';
         btn.textContent = val.label || val;
         if (val.color) btn.style.background = val.color;
-        btn.addEventListener('click', () => callback(val.value || val));
+        btn.addEventListener('click', () => {
+          onResult(val.value || val);
+        });
         containerOptions.appendChild(btn);
       });
     }
 
-    /* ------------ GIOCO 7: NUMERI ------------ */
+    /* ------------ NUMERI (AUTOPLAY) ------------ */
     (function() {
       const q = document.getElementById('numQuestion');
       const optionsDiv = document.getElementById('numOptions');
-      const nextBtn = document.getElementById('numNext');
       const msg = document.getElementById('numMsg');
       let current = 0;
 
       function renderQuestion() {
         q.innerHTML = `Che numero vedi?<br>
-          <span class="big-number" style="font-size:40px;font-weight:700;color:#4a3c89;display:inline-block;margin-top:6px;">
+          <span style="font-size:44px;font-weight:700;color:#4a3c89;display:inline-block;margin-top:6px;">
             ${current}
           </span>`;
       }
@@ -1335,22 +1416,20 @@
           if (val === current) {
             msg.textContent = 'Giusto! 👏';
             playSuccess();
+            setTimeout(newRound, 900); // AUTOPLAY prossimo numero
           } else {
             msg.textContent = 'Riprova 😊';
             playError();
           }
         });
       }
-
-      nextBtn.addEventListener('click', () => { newRound(); playClick(); });
       newRound();
     })();
 
-    /* ------------ GIOCO 8: COLORI ------------ */
+    /* ------------ COLORI (AUTOPLAY) ------------ */
     (function() {
       const q = document.getElementById('colorQuestion');
       const optionsDiv = document.getElementById('colorOptions');
-      const nextBtn = document.getElementById('colorNext');
       const msg = document.getElementById('colorMsg');
       const colors = [
         {name:'ROSSO', color:'#f56565'},
@@ -1369,17 +1448,17 @@
           if (val === current.name) {
             msg.textContent = 'Bravo, colore giusto! 🎨';
             playSuccess();
+            setTimeout(newRound, 900); // AUTOPLAY
           } else {
             msg.textContent = 'Ops, prova di nuovo 😊';
             playError();
           }
         });
       }
-      nextBtn.addEventListener('click', () => { newRound(); playClick(); });
       newRound();
     })();
 
-    /* ------------ GIOCO 9: GIOCATTOLI ------------ */
+    /* ------------ GIOCATTOLI ------------ */
     (function() {
       const itemsDiv = document.getElementById('toyItems');
       const msg = document.getElementById('toyMsg');
@@ -1444,7 +1523,7 @@
       reset();
     })();
 
-    /* ------------ GIOCO 10: PARCO PULITO ------------ */
+    /* ------------ PARCO PULITO ------------ */
     (function() {
       const itemsDiv = document.getElementById('trashItems');
       const msg = document.getElementById('trashMsg');
@@ -1507,7 +1586,7 @@
       reset();
     })();
 
-    /* ------------ GIOCO 11: CORSA TRENINO ------------ */
+    /* ------------ CORSA TRENINO ------------ */
     (function() {
       const canvas = document.getElementById('trainCanvas');
       const ctx = canvas.getContext('2d');
@@ -1522,30 +1601,37 @@
       let animId;
 
       function draw() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        const laneWidth = canvas.width / 3;
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0,0,w,h);
+        const laneWidth = w / 3;
         ctx.strokeStyle = '#cbd5e0';
         ctx.lineWidth = 2;
         ctx.setLineDash([6,6]);
         for (let i=1;i<3;i++) {
           ctx.beginPath();
           ctx.moveTo(laneWidth*i, 0);
-          ctx.lineTo(laneWidth*i, canvas.height);
+          ctx.lineTo(laneWidth*i, h);
           ctx.stroke();
         }
         ctx.setLineDash([]);
 
         const trainX = laneWidth * lane + laneWidth/2;
-        const trainY = canvas.height - 30;
+        const trainY = h - 40;
         ctx.fillStyle = '#805ad5';
-        ctx.fillRect(trainX-18, trainY-12, 36, 24);
+        ctx.fillRect(trainX-22, trainY-14, 44, 28);
         ctx.fillStyle = '#2d3748';
-        ctx.fillRect(trainX-10, trainY-18, 20, 10);
+        ctx.fillRect(trainX-15, trainY-22, 30, 10);
+        ctx.fillStyle = '#2d3748';
+        ctx.beginPath();
+        ctx.arc(trainX-12, trainY+14, 6, 0, Math.PI*2);
+        ctx.arc(trainX+12, trainY+14, 6, 0, Math.PI*2);
+        ctx.fill();
 
         ctx.fillStyle = '#e53e3e';
         obstacles.forEach(o => {
           const x = laneWidth*o.lane + laneWidth/2;
-          ctx.fillRect(x-12, o.y-12, 24, 24);
+          ctx.fillRect(x-14, o.y-14, 28, 28);
         });
       }
 
@@ -1558,9 +1644,9 @@
         obstacles = obstacles.filter(o => o.y < canvas.height + 20);
 
         const laneWidth = canvas.width / 3;
-        const trainY = canvas.height - 30;
+        const trainY = canvas.height - 40;
         for (const o of obstacles) {
-          if (o.lane === lane && Math.abs(o.y - trainY) < 24) {
+          if (o.lane === lane && Math.abs(o.y - trainY) < 30) {
             running = false;
             msg.textContent = 'Ops! Hai preso un ostacolo 🚧';
             playError();
@@ -1604,10 +1690,17 @@
         if (e.key === 'ArrowRight') { if (lane < 2) lane++; draw(); }
       });
 
-      draw();
+      function resizeTrainCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = 260;
+        draw();
+      }
+      window.addEventListener('resize', resizeTrainCanvas);
+      resizeTrainCanvas();
     })();
 
-    /* ------------ GIOCO 12: COSTRUISCI TRENINO ------------ */
+    /* ------------ COSTRUISCI TRENINO ------------ */
     (function() {
       const partsDiv = document.getElementById('trainParts');
       const slotsDiv = document.getElementById('trainSlots');
@@ -1674,11 +1767,10 @@
       reset();
     })();
 
-    /* ------------ GIOCO 13: CONTA STELLE ------------ */
+    /* ------------ CONTA STELLE (AUTOPLAY) ------------ */
     (function() {
       const display = document.getElementById('starsDisplay');
       const optsDiv = document.getElementById('starsOptions');
-      const nextBtn = document.getElementById('starsNext');
       const msg = document.getElementById('starsMsg');
       let current = 0;
 
@@ -1696,29 +1788,48 @@
           if (val === current) {
             msg.textContent = 'Giusto! ⭐';
             playSuccess();
+            setTimeout(newRound, 900);
           } else {
             msg.textContent = 'Riprova 🌟';
             playError();
           }
         });
       }
-      nextBtn.addEventListener('click', () => { newRound(); playClick(); });
       newRound();
     })();
 
-    /* ------------ GIOCO 14: SUONI ANIMALI (testo) ------------ */
+    /* ------------ SUONI ANIMALI ------------ */
     (function() {
       const q = document.getElementById('soundQuestion');
       const optsDiv = document.getElementById('soundOptions');
-      const nextBtn = document.getElementById('soundNext');
+      const nextBtnPlay = document.getElementById('soundPlay');
       const msg = document.getElementById('soundMsg');
+
       const data = [
-        {sound:'MUUU', correct:'Mucca 🐮', options:['Mucca 🐮','Gatto 🐱','Cane 🐶','Pecora 🐑']},
-        {sound:'BAU BAU', correct:'Cane 🐶', options:['Mucca 🐮','Cane 🐶','Gallina 🐔','Cavallo 🐴']},
-        {sound:'MIAO', correct:'Gatto 🐱', options:['Gatto 🐱','Pecora 🐑','Maiale 🐷','Asino 🫏']},
-        {sound:'BEEE', correct:'Pecora 🐑', options:['Cavallo 🐴','Gallo 🐓','Pecora 🐑','Maiale 🐷']}
+        {id:'mucca',   sound:'MUUU',    correct:'Mucca 🐮',  options:['Mucca 🐮','Gatto 🐱','Cane 🐶','Pecora 🐑']},
+        {id:'cane',    sound:'BAU BAU', correct:'Cane 🐶',   options:['Mucca 🐮','Cane 🐶','Gallina 🐔','Cavallo 🐴']},
+        {id:'gatto',   sound:'MIAO',   correct:'Gatto 🐱',  options:['Gatto 🐱','Pecora 🐑','Maiale 🐷','Asino 🫏']},
+        {id:'pecora',  sound:'BEEE',   correct:'Pecora 🐑', options:['Cavallo 🐴','Gallo 🐓','Pecora 🐑','Maiale 🐷']}
       ];
       let current = null;
+
+      function playAnimalSound(id) {
+        ensureAudioContext();
+        if (id === 'mucca') {
+          playTone(180, 0.25, 'sawtooth', 0.3);
+          setTimeout(() => playTone(180, 0.25, 'sawtooth', 0.3), 280);
+        } else if (id === 'cane') {
+          playTone(450, 0.1, 'square', 0.35);
+          setTimeout(() => playTone(350, 0.15, 'square', 0.3), 150);
+          setTimeout(() => playTone(450, 0.12, 'square', 0.3), 320);
+        } else if (id === 'gatto') {
+          playTone(600, 0.12, 'triangle', 0.3);
+          setTimeout(() => playTone(500, 0.18, 'triangle', 0.25), 150);
+        } else if (id === 'pecora') {
+          playTone(280, 0.18, 'sawtooth', 0.3);
+          setTimeout(() => playTone(280, 0.18, 'sawtooth', 0.3), 230);
+        }
+      }
 
       function newRound() {
         msg.textContent = '';
@@ -1729,17 +1840,24 @@
           if (val === current.correct) {
             msg.textContent = 'Bravo! 🐾';
             playSuccess();
+            setTimeout(newRound, 1100); // AUTOPLAY prossimo verso
           } else {
             msg.textContent = 'Non è lui, prova ancora 😊';
             playError();
           }
         });
+        // suona automaticamente il verso
+        setTimeout(() => playAnimalSound(current.id), 300);
       }
-      nextBtn.addEventListener('click', () => { newRound(); playClick(); });
+
+      nextBtnPlay.addEventListener('click', () => {
+        if (current) playAnimalSound(current.id);
+      });
+
       newRound();
     })();
 
-    /* ------------ GIOCO 15: BOLLE ------------ */
+    /* ------------ BOLLE ------------ */
     (function() {
       const area = document.getElementById('bubbleArea');
       const btn = document.getElementById('bubbleStart');
@@ -1751,17 +1869,17 @@
         const rect = area.getBoundingClientRect();
         const b = document.createElement('div');
         b.className = 'bubble';
-        const x = Math.random() * (rect.width - 40) + 5;
-        let y = rect.height + 30;
+        const x = Math.random() * (rect.width - 50) + 5;
+        let y = rect.height + 40;
         b.style.left = x + 'px';
         b.style.top = y + 'px';
         area.appendChild(b);
-        const speed = 0.6 + Math.random()*0.8;
+        const speed = 0.7 + Math.random()*1.1;
 
         const anim = setInterval(() => {
           y -= speed;
           b.style.top = y + 'px';
-          if (y < -40) {
+          if (y < -60) {
             clearInterval(anim);
             b.remove();
           }
@@ -1782,7 +1900,7 @@
         scoreSpan.textContent = score;
         area.innerHTML = '';
         playClick();
-        interval = setInterval(spawnBubble, 500);
+        interval = setInterval(spawnBubble, 450);
         setTimeout(() => {
           clearInterval(interval);
           interval = null;
@@ -1792,7 +1910,7 @@
       btn.addEventListener('click', start);
     })();
 
-    /* ------------ SERVICE WORKER (PWA) ------------ */
+    /* ------------ SERVICE WORKER ------------ */
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('service-worker.js')
@@ -1804,4 +1922,3 @@
   </script>
 </body>
 </html>
-
