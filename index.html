@@ -30,7 +30,7 @@
     }
 
     body {
-      overflow: hidden; /* l'app gestisce lei lo scroll interno */
+      overflow: hidden;
     }
 
     #app {
@@ -53,8 +53,6 @@
     .screen.active {
       display: flex;
     }
-
-    /* HEADER GIOCHI / MENU */
 
     .menu-header, .game-header {
       flex: 0 0 auto;
@@ -103,14 +101,12 @@
       color: #4a3c89;
     }
 
-    /* CORPO SCHERMATE */
-
     .screen-body {
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       padding: 8px;
-      overflow: auto; /* scroll interno se serve */
+      overflow: auto;
     }
 
     .game-body {
@@ -223,7 +219,7 @@
     .btn-14 { background: linear-gradient(135deg, #4299e1, #3182ce); }
     .btn-15 { background: linear-gradient(135deg, #f56565, #e53e3e); }
 
-    /* GIOCO 1: DISEGNA FULLSCREEN */
+    /* GIOCO 1: DISEGNA */
 
     .toolbar {
       display: flex;
@@ -253,11 +249,11 @@
       box-shadow: 0 3px 8px rgba(0,0,0,0.25);
       touch-action: none;
       width: 100%;
-      height: 70vh; /* bello grande */
+      height: 70vh;
       display: block;
     }
 
-    /* GIOCO 2: PUZZLE (FULL) */
+    /* GIOCO 2: PUZZLE */
 
     .puzzle-grid {
       flex: 1;
@@ -339,7 +335,7 @@
       user-select: none;
     }
 
-    /* GIOCO 5: ACCHIAPPA L'ANIMALE */
+    /* GIOCO 5: ACCHIAPPA */
 
     .mole-grid {
       display: grid;
@@ -396,8 +392,6 @@
       background: #c6f6d5;
     }
 
-    /* QUIZ */
-
     .quiz-text {
       font-size: 1.3rem;
       margin-bottom: 8px;
@@ -430,24 +424,24 @@
 
     .bubble-area {
       width: 100%;
-      max-width: 480px;
-      height: 320px;
+      max-width: 100%;
+      height: 65vh;
       border-radius: 22px;
-      background: linear-gradient(180deg, #cfefff, #edf2ff);
+      background: linear-gradient(180deg, #7fd3ff, #e0f7ff);
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8), 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.9), 0 4px 10px rgba(0,0,0,0.25);
       margin: 8px auto 0;
     }
 
     .bubble {
       position: absolute;
-      width: 40px;
-      height: 40px;
+      width: 56px;
+      height: 56px;
       border-radius: 999px;
-      border: 2px solid rgba(255,255,255,0.95);
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(173,216,230,0.3));
-      box-shadow: 0 0 10px rgba(255,255,255,0.9);
+      border: 2px solid #ffffff;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #49b5ff);
+      box-shadow: 0 0 14px rgba(73,181,255,0.9);
       cursor: pointer;
     }
 
@@ -491,12 +485,10 @@
       border-radius:20px;
       margin-top:8px;
       width:100%;
-      max-width:500px;
-      height:260px;
+      max-width:100%;
+      height:65vh;
       display:block;
     }
-
-    /* RESPONSIVE */
 
     @media (max-width: 700px) {
       .menu-grid {
@@ -698,7 +690,7 @@
       </div>
     </section>
 
-    <!-- GIOCO 5: ACCHIAPPA L'ANIMALE -->
+    <!-- GIOCO 5: ACCHIAPPA -->
     <section id="game-mole" class="screen">
       <div class="game-header">
         <button class="back-btn" data-home>🏠 Home</button>
@@ -909,7 +901,6 @@
   </div>
 
   <script>
-    /* ------------ AUDIO GLOBALE ------------ */
     let audioCtx = null;
     function ensureAudioContext() {
       if (!audioCtx) {
@@ -937,13 +928,20 @@
     function playSuccess() { playTone(880, 0.2, 'triangle', 0.25); }
     function playError()   { playTone(200, 0.25, 'sawtooth', 0.2); }
 
-    /* ------------ NAVIGAZIONE ------------ */
     const screens = document.querySelectorAll('.screen');
+    let resizeDrawCanvas;
+    let resizeTrainCanvas;
 
     function showScreen(id) {
       screens.forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-      if (id === 'game-disegna') resizeDrawCanvas();
+
+      if (id === 'game-disegna' && typeof resizeDrawCanvas === 'function') {
+        resizeDrawCanvas();
+      }
+      if (id === 'game-corsa' && typeof resizeTrainCanvas === 'function') {
+        resizeTrainCanvas();
+      }
     }
 
     document.querySelectorAll('.game-button').forEach(btn => {
@@ -961,7 +959,6 @@
     });
 
     /* ------------ DISEGNA ------------ */
-    let resizeDrawCanvas;
     (function() {
       const canvas = document.getElementById('drawCanvas');
       const ctx = canvas.getContext('2d');
@@ -1054,7 +1051,7 @@
       resizeDrawCanvas();
     })();
 
-    /* ------------ PUZZLE (1-4) ------------ */
+    /* ------------ PUZZLE ------------ */
     (function() {
       const grid = document.getElementById('puzzleGrid');
       const msg = document.getElementById('puzzleMsg');
@@ -1416,7 +1413,7 @@
           if (val === current) {
             msg.textContent = 'Giusto! 👏';
             playSuccess();
-            setTimeout(newRound, 900); // AUTOPLAY prossimo numero
+            setTimeout(newRound, 900);
           } else {
             msg.textContent = 'Riprova 😊';
             playError();
@@ -1448,7 +1445,7 @@
           if (val === current.name) {
             msg.textContent = 'Bravo, colore giusto! 🎨';
             playSuccess();
-            setTimeout(newRound, 900); // AUTOPLAY
+            setTimeout(newRound, 900);
           } else {
             msg.textContent = 'Ops, prova di nuovo 😊';
             playError();
@@ -1690,12 +1687,12 @@
         if (e.key === 'ArrowRight') { if (lane < 2) lane++; draw(); }
       });
 
-      function resizeTrainCanvas() {
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = 260;
+      resizeTrainCanvas = function() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width  = rect.width;
+        canvas.height = rect.height - 20;
         draw();
-      }
+      };
       window.addEventListener('resize', resizeTrainCanvas);
       resizeTrainCanvas();
     })();
@@ -1840,13 +1837,12 @@
           if (val === current.correct) {
             msg.textContent = 'Bravo! 🐾';
             playSuccess();
-            setTimeout(newRound, 1100); // AUTOPLAY prossimo verso
+            setTimeout(newRound, 1100);
           } else {
             msg.textContent = 'Non è lui, prova ancora 😊';
             playError();
           }
         });
-        // suona automaticamente il verso
         setTimeout(() => playAnimalSound(current.id), 300);
       }
 
@@ -1869,7 +1865,10 @@
         const rect = area.getBoundingClientRect();
         const b = document.createElement('div');
         b.className = 'bubble';
-        const x = Math.random() * (rect.width - 50) + 5;
+        const colors = ['#49b5ff','#ff7eb3','#ffcf5b','#7ae582'];
+        b.style.background = 'radial-gradient(circle at 30% 30%, #ffffff, ' +
+          colors[Math.floor(Math.random()*colors.length)] + ')';
+        const x = Math.random() * (rect.width - 60) + 5;
         let y = rect.height + 40;
         b.style.left = x + 'px';
         b.style.top = y + 'px';
