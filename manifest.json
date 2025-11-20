@@ -1,7 +1,7 @@
 {
   "name": "Mini Giochi Bambini",
   "short_name": "Mini Giochi",
-  "start_url": "./index.html",
+  "start_url": "/Game15-Chlirim/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffe4f2",
