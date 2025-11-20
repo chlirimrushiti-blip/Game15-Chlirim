@@ -1795,63 +1795,61 @@
       newRound();
     })();
 
-    /* ------------ SUONI ANIMALI ------------ */
-    (function() {
-      const q = document.getElementById('soundQuestion');
-      const optsDiv = document.getElementById('soundOptions');
-      const nextBtnPlay = document.getElementById('soundPlay');
-      const msg = document.getElementById('soundMsg');
+    /* ------------ SUONI ANIMALI (SOLO FILE REALI) ------------ */
+(function () {
+  const q = document.getElementById("soundQuestion");
+  const optsDiv = document.getElementById("soundOptions");
+  const nextBtnPlay = document.getElementById("soundPlay");
+  const msg = document.getElementById("soundMsg");
 
-      const data = [
-        {id:'mucca',   sound:'MUUU',    correct:'Mucca 🐮',  options:['Mucca 🐮','Gatto 🐱','Cane 🐶','Pecora 🐑']},
-        {id:'cane',    sound:'BAU BAU', correct:'Cane 🐶',   options:['Mucca 🐮','Cane 🐶','Gallina 🐔','Cavallo 🐴']},
-        {id:'gatto',   sound:'MIAO',   correct:'Gatto 🐱',  options:['Gatto 🐱','Pecora 🐑','Maiale 🐷','Asino 🫏']},
-        {id:'pecora',  sound:'BEEE',   correct:'Pecora 🐑', options:['Cavallo 🐴','Gallo 🐓','Pecora 🐑','Maiale 🐷']}
-      ];
-      let current = null;
+  const data = [
+    { id: "mucca", sound: "MUUU", correct: "Mucca 🐮", file: "mucca.mp3", options: ["Mucca 🐮", "Gatto 🐱", "Cane 🐶", "Pecora 🐑"] },
+    { id: "cane", sound: "BAU BAU", correct: "Cane 🐶", file: "cane.mp3", options: ["Mucca 🐮", "Cane 🐶", "Gallina 🐔", "Cavallo 🐴"] },
+    { id: "gatto", sound: "MIAO", correct: "Gatto 🐱", file: "gatto.mp3", options: ["Gatto 🐱", "Pecora 🐑", "Maiale 🐷", "Asino 🫏"] },
+    { id: "pecora", sound: "BEEE", correct: "Pecora 🐑", file: "pecora.mp3", options: ["Cavallo 🐴", "Gallo 🐓", "Pecora 🐑", "Maiale 🐷"] }
+  ];
 
-      function playAnimalSound(id) {
-        ensureAudioContext();
-        if (id === 'mucca') {
-          playTone(180, 0.25, 'sawtooth', 0.3);
-          setTimeout(() => playTone(180, 0.25, 'sawtooth', 0.3), 280);
-        } else if (id === 'cane') {
-          playTone(450, 0.1, 'square', 0.35);
-          setTimeout(() => playTone(350, 0.15, 'square', 0.3), 150);
-          setTimeout(() => playTone(450, 0.12, 'square', 0.3), 320);
-        } else if (id === 'gatto') {
-          playTone(600, 0.12, 'triangle', 0.3);
-          setTimeout(() => playTone(500, 0.18, 'triangle', 0.25), 150);
-        } else if (id === 'pecora') {
-          playTone(280, 0.18, 'sawtooth', 0.3);
-          setTimeout(() => playTone(280, 0.18, 'sawtooth', 0.3), 230);
-        }
+  const audioMap = {};
+  data.forEach(d => {
+    const audio = new Audio("sounds/" + d.file);
+    audio.preload = "auto";
+    audioMap[d.id] = audio;
+  });
+
+  function playAnimalSound(id) {
+    const audio = audioMap[id];
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
+
+  let current = null;
+
+  function newRound() {
+    msg.textContent = "";
+    current = data[Math.floor(Math.random() * data.length)];
+    q.textContent = `Chi fa "${current.sound}" ?`;
+    const opts = current.options.map(o => ({ value: o, label: o }));
+    createQuiz(optsDiv, opts, current.correct, val => {
+      if (val === current.correct) {
+        msg.textContent = "Bravo! 🐾";
+        playSuccess();
+        setTimeout(newRound, 1000);
+      } else {
+        msg.textContent = "No, prova di nuovo 😊";
+        playError();
       }
+    });
+    playAnimalSound(current.id);
+  }
 
-      function newRound() {
-        msg.textContent = '';
-        current = data[Math.floor(Math.random()*data.length)];
-        q.textContent = `Chi fa "${current.sound}" ?`;
-        const opts = current.options.map(o => ({value:o, label:o}));
-        createQuiz(optsDiv, opts, current.correct, val => {
-          if (val === current.correct) {
-            msg.textContent = 'Bravo! 🐾';
-            playSuccess();
-            setTimeout(newRound, 1100);
-          } else {
-            msg.textContent = 'Non è lui, prova ancora 😊';
-            playError();
-          }
-        });
-        setTimeout(() => playAnimalSound(current.id), 300);
-      }
+  nextBtnPlay.addEventListener("click", () => {
+    if (current) playAnimalSound(current.id);
+  });
 
-      nextBtnPlay.addEventListener('click', () => {
-        if (current) playAnimalSound(current.id);
-      });
+  newRound();
+})();
 
-      newRound();
-    })();
 
     /* ------------ BOLLE ------------ */
     (function() {
@@ -1921,3 +1919,4 @@
   </script>
 </body>
 </html>
+
